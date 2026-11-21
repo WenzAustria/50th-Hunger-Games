@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<base href="../">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>50th Hunger Games — Second Quarter Quell | Sunrise on the Reaping</title>
+<meta name="description" content="Play the 50th Hunger Games: a 3D arena survival game with 48 tributes.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&family=Monoton&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/game.css">
+</head>
+<body class="g50">
+
+<!-- ============ 1. WELCOME ============ -->
+<section id="screen-welcome" class="screen active">
+  <div class="rays"></div>
+  <div class="welcome-box">
+    <a class="back" href="index.html">&larr; Panem Archive (Home)</a>
+    <img class="w-logo" src="assets/img/logo-50th.jpg" alt="50th Hunger Games emblem">
+    <p class="kicker">WELCOME TO THE</p>
+    <h1 class="deco">2nd Quarter Quell</h1>
+    <h2 class="sub">Hunger Games: Sunrise on the Reaping</h2>
+    <p class="slogan">PANEM IS WATCHING!</p>
+    <button id="btn-enter" class="btn big">ENTER</button>
+    <div class="about-50">
+      <img id="w-haymitch" src="assets/img/tributes/haymitch.jpg" alt="Haymitch Abernathy">
+      <div>
+        <h3>About the 50th Hunger Games</h3>
+        <p>The Second Quarter Quell doubled the tributes: <b>48 children</b>, two boys and two girls from each of the 12 districts, were sent into a beautiful but deadly arena of poisonous plants, mutts and an active volcano.</p>
+        <p><b>Victor:</b> Haymitch Abernathy, District 12. He turned the arena itself against the Capitol and became the only living victor from his district until the 74th Games.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. SELECT ============ -->
+<section id="screen-select" class="screen">
+  <header class="sel-head">
+    <button class="back-btn" id="btn-back-welcome">&larr; Back</button>
+    <h2 class="deco-sm">Select Your Tribute</h2>
+    <span class="count">48 tributes • 12 districts</span>
+  </header>
+  <div class="sel-wrap">
+    <div id="tribute-grid" class="tgrid"></div>
+    <aside id="tribute-panel" class="tpanel">
+      <div class="tp-top">
+        <img id="tp-img" alt="">
+        <div>
+          <h3 id="tp-name">—</h3>
+          <div id="tp-dist" class="tp-dist"></div>
+          <div id="tp-meta" class="tp-meta"></div>
+        </div>
+        <img id="tp-badge" class="tp-badge" alt="">
+      </div>
+      <p id="tp-perk" class="tp-perk"></p>
+      <p id="tp-bio" class="tp-bio"></p>
+
+      <h4>Difficulty</h4>
+      <div id="diff-pick" class="diffs"></div>
+      <h4>Day length</h4>
+      <div id="day-pick" class="chips">
+        <button data-day="120">2:00</button><button data-day="180">3:00</button><button data-day="300" class="on">5:00</button>
+      </div>
+      <details class="how">
+        <summary>How to play</summary>
+        <div class="how-grid">
+          <div><b>Keyboard + mouse</b><br>WASD move • Mouse look (click to capture) • Left click attack • Shift sprint • Space dash • E pick up / drink / eat • 1-2-3 weapon slots • Q cycle • H medkit • T autopilot • P pause • M mute</div>
+          <div><b>Phone / tablet</b><br>Left stick moves • Drag the right side to look • ATK attacks • USE picks up, eats, drinks • DASH, MED and RUN buttons • Tap slots to switch weapons. Landscape works best.</div>
+          <div><b>Weapons</b><br>🔪 Melee: knife, spear, mace<br>🏹 Ranged: bow, throwing knives, slingshot<br>🪓 Survival: axe, sword, trident, blowgun &amp; darts, sickle</div>
+          <div><b>Survive</b><br>Rush the Cornucopia for weapons. Drink at ponds, eat orange fruit (never purple berries). Stay inside the safe zone and dodge volcano fireballs. Last tribute standing wins.</div>
+        </div>
+      </details>
+      <button id="btn-start" class="btn big">ENTER THE ARENA</button>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ 3. GAME ============ -->
+<section id="screen-game" class="screen">
+  <div id="viewport"></div>
+  <div id="toxic-vignette"></div><div id="hit-flash"></div><div id="night-tint"></div>
+
+  <div id="hud">
+    <div id="hud-player">
+      <img id="hp-img" alt=""><div class="hp-col">
+        <div class="hp-row"><b id="hp-name">—</b><img id="hp-badge" alt=""></div>
+        <small id="hp-dist"></small>
+        <div class="bars">
+          <div class="bar hp"><i id="bar-hp"></i><span id="val-hp"></span></div>
+          <div class="bar hu"><i id="bar-hunger"></i><em>FOOD</em></div>
+          <div class="bar th"><i id="bar-thirst"></i><em>WATER</em></div>
+          <div class="bar st"><i id="bar-stam"></i><em>STAMINA</em></div>
+        </div>
+        <div id="hud-status"></div>
+      </div>
+    </div>
+
+    <div id="hud-top">
+      <div class="day"><b id="day-label">DAY 1</b><span id="day-time">5:00</span></div>
+      <div class="clock"><div class="track"><div id="clock-night"></div></div><span id="clock-icon">☀️</span></div>
+      <div class="alive"><b id="alive-n">48</b> tributes left • <b id="kills-n">0</b> kills</div>
+    </div>
+
+    <div id="hud-right">
+      <canvas id="minimap" width="150" height="150"></canvas>
+      <div class="rbtns">
+        <button id="btn-speed" title="Game speed">⏩ ×1</button><button id="btn-mute" title="Sound (M)">🔊</button><button id="btn-pause" title="Pause (P)">⏸</button>
+      </div>
+      <div id="diff-ind"></div>
+      <div id="hud-feed"></div>
+    </div>
+
+    <div id="hud-banner"></div>
+    <div id="hud-toast"></div>
+    <div id="countdown"></div>
+    <div id="crosshair"></div>
+    <div id="hud-prompt"></div>
+    <div id="click-hint">Click the arena to capture the mouse</div>
+    <div id="auto-ind">AUTOPILOT — <span class="k-pc">press T</span><span class="k-touch">tap AUTO</span> to take control</div>
+    <div id="spec-bar">Spectating: <b id="spec-name"></b> — click / Space to switch • use ⏩ to speed up</div>
+
+    <div id="hud-slots">
+      <div class="slot" data-slot="0"><kbd>1</kbd><span class="ico">—</span><span class="nm">Melee</span><span class="am"></span></div>
+      <div class="slot" data-slot="1"><kbd>2</kbd><span class="ico">—</span><span class="nm">Ranged</span><span class="am"></span></div>
+      <div class="slot" data-slot="2"><kbd>3</kbd><span class="ico">—</span><span class="nm">Survival</span><span class="am"></span></div>
+      <div class="slot med"><kbd>H</kbd><span class="ico">🩹</span><span class="nm">Medkit</span><span class="am">×<b id="med-n">0</b></span></div>
+    </div>
+
+    <div id="memorial"><b>THE FALLEN</b><span id="memorial-list"></span></div>
+
+    <div class="touch-ui">
+      <div id="joy"><div id="joy-knob"></div></div>
+      <button id="btn-atk">ATK</button>
+      <button id="btn-use">USE</button>
+      <button id="btn-dash">DASH</button>
+      <button id="btn-med">MED</button>
+      <button id="btn-run">RUN</button>
+      <button id="btn-auto" class="small">AUTO</button>
+    </div>
+  </div>
+
+  <div id="loading" class="overlay show"><div><div class="spin"></div><p>Preparing the arena…</p></div></div>
+
+  <div id="screen-pause" class="overlay"><div class="ov-box"><h2 class="deco-sm">Paused</h2>
+    <button id="btn-resume" class="btn">Resume</button><a class="btn ghost" href="50th-hunger-games/index.html">Quit to menu</a></div></div>
+
+  <div id="screen-death" class="overlay"><div class="ov-box"><h2 class="deco-sm">You have fallen</h2><p id="death-text"></p>
+    <p class="muted">Your cannon has fired. The Games go on without you.</p>
+    <button id="btn-spectate" class="btn">Spectate</button><button id="btn-skip" class="btn ghost">Skip to the result (×8)</button></div></div>
+
+  <div id="screen-victor" class="overlay victor"><div id="confetti"></div><div class="ov-box big">
+    <p class="kicker" id="v-title">THE VICTOR</p>
+    <div class="v-card"><img id="v-img" alt=""><img id="v-badge" alt=""></div>
+    <h2 id="v-name" class="deco"></h2><p id="v-dist" class="v-dist"></p>
+    <p id="v-stats" class="muted"></p><p id="v-you"></p>
+    <div class="row"><a class="btn" href="50th-hunger-games/index.html?select=1">Play again</a><a class="btn ghost" href="index.html">Back to home</a></div>
+  </div></div>
+</section>
+
+<script src="assets/vendor/three.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/audio.js"></script>
+<script src="assets/js/world.js"></script>
+<script src="assets/js/actors.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/ui.js"></script>
+</body>
+</html>
